@@ -39,9 +39,13 @@ RUN set -eux \
 COPY --from=builder /usr/lib/python3.8/site-packages/ /usr/lib/python3.8/site-packages/
 COPY --from=builder /usr/bin/ansible /usr/bin/ansible
 COPY --from=builder /usr/bin/ansible-connection /usr/bin/ansible-connection
+RUN pip3 install --upgrade pip \
+        && pip3 install boto3 \
+        && ansible-galaxy collection install amazon.aws
 
 FROM scratch
 LABEL maintainer="Zoran Zorica <zzorica@soultrace.net>"
+
 COPY --from=stage / /
 WORKDIR /opt
 ENTRYPOINT []
